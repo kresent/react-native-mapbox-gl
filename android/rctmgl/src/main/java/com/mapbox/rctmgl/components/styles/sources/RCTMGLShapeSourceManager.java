@@ -214,6 +214,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
             int buildingId = Integer.parseInt(values[i]);
             int count = Integer.parseInt(values[i + 1]);
             Coordinate coordinate = buildingsMap.get(buildingId);
+            if (coordinate == null) continue;
 
             String f1 = "{\"type\":\"Feature\"";
             String f2 = ", \"geometry\":{\"type\":\"Point\",\"coordinates\":[" + coordinate.lng + "," + coordinate.lat + "]}}";
