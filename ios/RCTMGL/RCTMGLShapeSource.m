@@ -101,7 +101,7 @@ static NSMutableDictionary *_buildingCoords;
 - (NSString*)_makeGeoJson
 {
     NSString *geoJsonTemplate = @"{\"type\":\"FeatureCollection\",\"features\":[%@]}";
-    NSString *buildingTemplate = @"{\"type\":\"Feature\",\"properties\":{%@},\"geometry\":{\"type\": \"Point\", \"coordinates\":[%@]}}";
+    NSString *buildingTemplate = @"{\"type\":\"Feature\",\"properties\":{%@},\"geometry\":{\"type\": \"Point\", \"coordinates\":[%@]}},";
     NSString *apartmentsCountTemplate = @"\"apartmentsCount\": %@";
     
     NSArray *clustersArray = [self _requestClusters];
@@ -127,17 +127,14 @@ static NSMutableDictionary *_buildingCoords;
             
             // add [apartmentsInCluster - 1] features without the "apartmentsCount" property (for clusterization)
             for(int n = 0; n < apartmentsInCluster - 1; n++) {
-                [features appendString:@","];
                 [features appendString:buildingString];
-            }
-            
-            if (i != clustersArray.count - 2) {
-                [features appendString:@","];
             }
         }
     }
     
-    return [NSString stringWithFormat:geoJsonTemplate, features];
+    NSString *stringWithoutLastComma = [features substringToIndex:[features length]-1];
+    
+    return [NSString stringWithFormat:geoJsonTemplate, stringWithoutLastComma];
 }
 
 - (MGLSource*)makeSource
